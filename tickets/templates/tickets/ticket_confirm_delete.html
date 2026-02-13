@@ -1,0 +1,10 @@
+<h2>¿Seguro que deseas eliminar este ticket?</h2>
+
+<p>{{ ticket.titulo }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar</button>
+</form>
+
+<a href="{% url 'ticket_list' %}">Cancelar</a>

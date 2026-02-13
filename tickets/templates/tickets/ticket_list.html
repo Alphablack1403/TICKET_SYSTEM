@@ -1,0 +1,22 @@
+<h1>Lista de Tickets</h1>
+
+<p>
+    Usuario: {{ request.user.username }} |
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit">Cerrar sesión</button>
+    </form>
+</p>
+
+
+<a href="{% url 'ticket_create' %}">Crear Ticket</a>
+
+<ul>
+    {% for ticket in tickets %}
+        <li>
+            <a href="{% url 'ticket_detail' ticket.pk %}">
+                {{ ticket.titulo }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

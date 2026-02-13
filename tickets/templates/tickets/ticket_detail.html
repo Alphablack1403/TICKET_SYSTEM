@@ -1,0 +1,9 @@
+<h2>{{ ticket.titulo }}</h2>
+<p>{{ ticket.descripcion }}</p>
+<p>Estado: {{ ticket.estado }}</p>
+<p>Creado por: {{ ticket.usuario.username }}</p>
+
+
+<a href="{% url 'ticket_update' ticket.pk %}">Editar</a>
+<a href="{% url 'ticket_delete' ticket.pk %}">Eliminar</a>
+<a href="{% url 'ticket_list' %}">Volver</a>
