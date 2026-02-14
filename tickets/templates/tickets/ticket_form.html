@@ -1,9 +1,22 @@
-<h2>Formulario Ticket</h2>
+{% extends "base.html" %} {% block title %}Formulario Ticket{% endblock %} {%block content %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+<div class="container">
+  <h2>Formulario Ticket</h2>
 
-<a href="{% url 'ticket_list' %}">Cancelar</a>
+  <form method="post" class="filter-form">
+    {% csrf_token %} {% for field in form %}
+    <div class="form-row">
+      {{ field.label_tag }} {{ field }} {% if field.errors %}
+      <span style="color: #d63031">{{ field.errors }}</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="filter-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

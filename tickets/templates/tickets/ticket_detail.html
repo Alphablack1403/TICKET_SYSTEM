@@ -1,42 +1,75 @@
-<h2>{{ ticket.titulo }}</h2>
-<p>{{ ticket.descripcion }}</p>
-<p>Estado: {{ ticket.estado }}</p>
-<p>Creado por: {{ ticket.usuario.username }}</p>
+{% extends "base.html" %} {% block title %}Detalle Ticket{% endblock %} {% block content %}
+
+<div class="ticket-detail-card">
+  <div class="ticket-detail-header">
+    <h2>{{ ticket.titulo }}</h2>
+
+    <div class="ticket-actions">
+      <a href="{% url 'ticket_update' ticket.pk %}" class="btn btn-secondary">
+        Editar
+      </a>
+
+      <a href="{% url 'ticket_delete' ticket.pk %}" class="btn btn-danger">
+        Eliminar
+      </a>
+
+      <a href="{% url 'ticket_list' %}" class="btn btn-secondary"> Volver </a>
+    </div>
+  </div>
+
+  <div class="ticket-detail-meta">
+    {% if ticket.estado == "ABIERTO" %}
+    <span class="badge badge-abierto">Abierto</span>
+    {% elif ticket.estado == "EN_PROGRESO" %}
+    <span class="badge badge-progreso">En progreso</span>
+    {% else %}
+    <span class="badge badge-cerrado">Cerrado</span>
+    {% endif %}
+
+    <span class="priority"> Prioridad: {{ ticket.prioridad }} </span>
+    <span><strong>Creado por:</strong> {{ ticket.usuario.username }}</span>
+  </div>
+
+  <div class="ticket-description">{{ ticket.descripcion }}</div>
+
+  {% if ticket.estado == "CERRADO" %}
+  <form
+    method="post"
+    action="{% url 'ticket_reopen' ticket.pk %}"
+    class="reopen-form"
+  >
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Reabrir ticket</button>
+  </form>
+  {% endif %}
+</div>
 
 <hr />
 
 <h3>Comentarios</h3>
 
-{% for comentario in comentarios %}
-<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
-  <strong>{{ comentario.usuario.username }}</strong>
-  <small>{{ comentario.fecha_registro }}</small>
-  <p>{{ comentario.descripcion }}</p>
+<div class="comments-container">
+  {% for comentario in comentarios %}
+  <div class="comment-card">
+    <div class="comment-header">
+      <strong>{{ comentario.usuario.username }}</strong>
+      <span class="comment-date">{{ comentario.fecha_registro }}</span>
+    </div>
+
+    <div class="comment-body">{{ comentario.descripcion }}</div>
+  </div>
+  {% empty %}
+  <p class="empty-message">No hay comentarios aún.</p>
+  {% endfor %}
 </div>
-{% empty %}
-<p>No hay comentarios aún.</p>
-{% endfor %} 
 
-{% if ticket.estado == "CERRADO" %}
-<form method="post" action="{% url 'ticket_reopen' ticket.pk %}">
-  {% csrf_token %}
-  <button type="submit">Reabrir ticket</button>
-</form>
-{% endif %}
-
-
-<hr>
+<hr />
 
 <h4>Agregar comentario</h4>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.descripcion }}
-    <br><br>
-    <button type="submit">Enviar comentario</button>
+<form method="post" class="comment-form">
+  {% csrf_token %} {{ form.descripcion }}
+  <button type="submit" class="btn btn-primary">Enviar comentario</button>
 </form>
 
-
-<a href="{% url 'ticket_update' ticket.pk %}">Editar</a>
-<a href="{% url 'ticket_delete' ticket.pk %}">Eliminar</a>
-<a href="{% url 'ticket_list' %}">Volver</a>
+{% endblock %}

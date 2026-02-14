@@ -1,64 +1,103 @@
-<h1>Lista de Tickets</h1>
+{% extends "base.html" %}
+{% block title %}Lista de Tickets{% endblock %}
 
-<p>
-    Usuario: {{ request.user.username }} |
-    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+{% block content %}
+
+<h1>Gestión de Tickets</h1>
+
+<div class="header-bar">
+    <div>
+        <strong>Usuario:</strong> {{ request.user.username }}
+    </div>
+    <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
-        <button type="submit">Cerrar sesión</button>
+        <button type="submit" class="btn btn-secondary">Cerrar sesión</button>
     </form>
-</p>
+</div>
 
-<a href="{% url 'ticket_create' %}">Crear Ticket</a>
+<br>
+
+<a href="{% url 'ticket_create' %}" class="btn btn-primary">
+    + Crear Ticket
+</a>
+
 
 <hr>
 
 <h3>Filtros</h3>
 
-<form method="get" style="margin-bottom:20px;">
+<form method="get" class="filter-form">
     
-    <label>Estado:</label>
-    <select name="estado">
-        <option value="">Todos</option>
-        {% for value, label in estados %}
-            <option value="{{ value }}"
-                {% if estado_actual == value %}selected{% endif %}>
-                {{ label }}
-            </option>
-        {% endfor %}
-    </select>
+    <div class="form-row">
+        <label>Estado</label>
+        <select name="estado">
+            <option value="">Todos</option>
+            {% for value, label in estados %}
+                <option value="{{ value }}"
+                    {% if estado_actual == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
 
-    <label>Prioridad:</label>
-    <select name="prioridad">
-        <option value="">Todas</option>
-        {% for value, label in prioridades %}
-            <option value="{{ value }}"
-                {% if prioridad_actual == value %}selected{% endif %}>
-                {{ label }}
-            </option>
-        {% endfor %}
-    </select>
+    <div class="form-row">
+        <label>Prioridad</label>
+        <select name="prioridad">
+            <option value="">Todas</option>
+            {% for value, label in prioridades %}
+                <option value="{{ value }}"
+                    {% if prioridad_actual == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
 
-    <label>Categoría:</label>
-    <input type="text" name="categoria" value="{{ categoria_actual|default:'' }}">
+    <div class="form-row">
+        <label>Categoría</label>
+        <input type="text" name="categoria" value="{{ categoria_actual|default:'' }}">
+    </div>
 
-    <button type="submit">Filtrar</button>
-    <a href="{% url 'ticket_list' %}">Limpiar</a>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Limpiar</a>
+
 </form>
 
 <hr>
 
-<ul>
-    {% for ticket in tickets %}
-        <li>
+{% for ticket in tickets %}
+    <div class="ticket-card">
+
+        <div class="ticket-title">
             <a href="{% url 'ticket_detail' ticket.pk %}">
                 {{ ticket.titulo }}
             </a>
-            - {{ ticket.estado }}
-            - {{ ticket.prioridad }}
-            - Creado por: {{ ticket.usuario.username }}
-            - Última actualización: {{ ticket.updated_at }}
-        </li>
-    {% empty %}
-        <li>No hay tickets disponibles.</li>
-    {% endfor %}
-</ul>
+        </div>
+
+        <div class="ticket-meta">
+            Creado por: {{ ticket.usuario.username }} <br>
+            Última actualización: {{ ticket.updated_at }}
+        </div>
+
+        <div class="ticket-status">
+            {% if ticket.estado == "ABIERTO" %}
+                <span class="badge badge-abierto">Abierto</span>
+            {% elif ticket.estado == "EN_PROGRESO" %}
+                <span class="badge badge-progreso">En progreso</span>
+            {% else %}
+                <span class="badge badge-cerrado">Cerrado</span>
+            {% endif %}
+
+            <span class="priority">
+                Prioridad: {{ ticket.prioridad }}
+            </span>
+        </div>
+
+    </div>
+
+{% empty %}
+    <p>No hay tickets disponibles.</p>
+{% endfor %}
+
+{% endblock %}

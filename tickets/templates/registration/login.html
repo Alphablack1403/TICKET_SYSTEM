@@ -1,7 +1,36 @@
-<h2>Login</h2>
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Ingresar</button>
-</form>
+{% block content %}
+
+<div class="container" style="max-width: 400px; margin: 80px auto; padding: 30px;">
+    <h2 style="text-align: center; margin-bottom: 25px;">Iniciar Sesión</h2>
+
+    {% if form.errors %}
+        <div style="color: #e53935; margin-bottom: 15px;">
+            Usuario o contraseña incorrectos.
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <label for="id_username">Usuario</label>
+            <input type="text" name="username" id="id_username" placeholder="Ingrese su usuario" required>
+        </div>
+
+        <div class="form-row">
+            <label for="id_password">Contraseña</label>
+            <input type="password" name="password" id="id_password" placeholder="Ingrese su contraseña" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Ingresar</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a >¿Olvidaste tu contraseña?</a>
+    </div>
+</div>
+
+{% endblock %}

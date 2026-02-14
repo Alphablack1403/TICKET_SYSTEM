@@ -1,10 +1,22 @@
-<h2>¿Seguro que deseas eliminar este ticket??</h2>
+{% extends "base.html" %}
+{% block title %}Eliminar Ticket{% endblock %}
 
-<p>{{ ticket.titulo }}</p>
+{% block content %}
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Confirmar</button>
-</form>
+<div class="container">
+    <h2>¿Seguro que deseas eliminar este ticket?</h2>
 
-<a href="{% url 'ticket_list' %}">Cancelar</a>
+    <div class="ticket-card">
+        <strong>{{ ticket.titulo }}</strong>
+    </div>
+
+    <form method="post" class="filter-form">
+        {% csrf_token %}
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-danger">Confirmar</button>
+            <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
