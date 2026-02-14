@@ -3,6 +3,39 @@
 <p>Estado: {{ ticket.estado }}</p>
 <p>Creado por: {{ ticket.usuario.username }}</p>
 
+<hr />
+
+<h3>Comentarios</h3>
+
+{% for comentario in comentarios %}
+<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
+  <strong>{{ comentario.usuario.username }}</strong>
+  <small>{{ comentario.fecha_registro }}</small>
+  <p>{{ comentario.descripcion }}</p>
+</div>
+{% empty %}
+<p>No hay comentarios aún.</p>
+{% endfor %} 
+
+{% if ticket.estado == "CERRADO" %}
+<form method="post" action="{% url 'ticket_reopen' ticket.pk %}">
+  {% csrf_token %}
+  <button type="submit">Reabrir ticket</button>
+</form>
+{% endif %}
+
+
+<hr>
+
+<h4>Agregar comentario</h4>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.descripcion }}
+    <br><br>
+    <button type="submit">Enviar comentario</button>
+</form>
+
 
 <a href="{% url 'ticket_update' ticket.pk %}">Editar</a>
 <a href="{% url 'ticket_delete' ticket.pk %}">Eliminar</a>

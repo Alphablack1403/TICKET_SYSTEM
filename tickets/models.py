@@ -49,9 +49,17 @@ class Comentario(models.Model):
         on_delete=models.CASCADE,
         related_name='comentarios'
     )
-    titulo = models.CharField(max_length=200)
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comentarios'
+    )
     descripcion = models.TextField()
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['fecha_registro']
+
     def __str__(self):
-        return f"Comentario en {self.ticket.titulo}"
+        return f"{self.usuario.username} - {self.ticket.titulo}"
+

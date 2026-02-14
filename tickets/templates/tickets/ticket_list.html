@@ -3,13 +3,49 @@
 <p>
     Usuario: {{ request.user.username }} |
     <form action="{% url 'logout' %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit">Cerrar sesión</button>
+        {% csrf_token %}
+        <button type="submit">Cerrar sesión</button>
     </form>
 </p>
 
-
 <a href="{% url 'ticket_create' %}">Crear Ticket</a>
+
+<hr>
+
+<h3>Filtros</h3>
+
+<form method="get" style="margin-bottom:20px;">
+    
+    <label>Estado:</label>
+    <select name="estado">
+        <option value="">Todos</option>
+        {% for value, label in estados %}
+            <option value="{{ value }}"
+                {% if estado_actual == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Prioridad:</label>
+    <select name="prioridad">
+        <option value="">Todas</option>
+        {% for value, label in prioridades %}
+            <option value="{{ value }}"
+                {% if prioridad_actual == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Categoría:</label>
+    <input type="text" name="categoria" value="{{ categoria_actual|default:'' }}">
+
+    <button type="submit">Filtrar</button>
+    <a href="{% url 'ticket_list' %}">Limpiar</a>
+</form>
+
+<hr>
 
 <ul>
     {% for ticket in tickets %}
@@ -17,6 +53,12 @@
             <a href="{% url 'ticket_detail' ticket.pk %}">
                 {{ ticket.titulo }}
             </a>
+            - {{ ticket.estado }}
+            - {{ ticket.prioridad }}
+            - Creado por: {{ ticket.usuario.username }}
+            - Última actualización: {{ ticket.updated_at }}
         </li>
+    {% empty %}
+        <li>No hay tickets disponibles.</li>
     {% endfor %}
 </ul>
