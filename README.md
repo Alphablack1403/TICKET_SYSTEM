@@ -76,6 +76,10 @@ python manage.py migrate
 
 python manage.py createsuperuser
 
+### 7️⃣ Ejecutar servidor
+
+python manage.py runserver
+
 Aplicación disponible en: http://127.0.0.1:8000/
 
 ## 
