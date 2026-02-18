@@ -1,22 +1,63 @@
-{% extends "base.html" %} {% block title %}Formulario Ticket{% endblock %} {%block content %}
+{% extends "base.html" %}
+{% block title %}Formulario Ticket{% endblock %}
+{% block content %}
 
 <div class="container">
-  <h2>Formulario Ticket</h2>
 
-  <form method="post" class="filter-form">
-    {% csrf_token %} {% for field in form %}
-    <div class="form-row">
-      {{ field.label_tag }} {{ field }} {% if field.errors %}
-      <span style="color: #d63031">{{ field.errors }}</span>
-      {% endif %}
-    </div>
-    {% endfor %}
+  <div class="form-card">
 
-    <div class="filter-actions">
-      <button type="submit" class="btn btn-primary">Guardar</button>
-      <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Cancelar</a>
+    <div class="form-header">
+      <h2>
+        {% if form.instance.pk %}
+          Editar Ticket
+        {% else %}
+          Crear Nuevo Ticket
+        {% endif %}
+      </h2>
+      <p class="form-subtitle">
+        Completa la información requerida para gestionar el ticket.
+      </p>
     </div>
-  </form>
+
+    <form method="post" class="ticket-form">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div class="form-group">
+
+          <label>
+            {{ field.label }}
+          </label>
+
+          {{ field }}
+
+          {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+          {% endif %}
+
+          {% if field.errors %}
+            <div class="error-message">
+              {{ field.errors }}
+            </div>
+          {% endif %}
+
+        </div>
+      {% endfor %}
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          Guardar
+        </button>
+
+        <a href="{% url 'ticket_list' %}" class="btn btn-secondary">
+          Cancelar
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+
 </div>
 
 {% endblock %}

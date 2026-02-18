@@ -381,3 +381,402 @@ hr {
 .empty-message {
     color: #777;
 }
+
+
+/* ======================
+   RESPONSIVE
+====================== */
+
+@media (max-width: 768px) {
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .page-header-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .ticket-actions {
+        flex-wrap: wrap;
+    }
+
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f6f9;
+    color: #1f2937;
+}
+
+/* Header */
+.app-header {
+    background: #111827;
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.nav-link {
+    color: #d1d5db;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.nav-link.primary {
+    background-color: #2563eb;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    color: white;
+}
+
+.nav-link.primary:hover {
+    background-color: #1d4ed8;
+}
+
+/* Main */
+.app-main {
+    padding: 2rem;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Cards */
+.card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 1.5rem;
+}
+
+.ticket-card:hover {
+    transform: translateY(-2px);
+    transition: 0.2s ease;
+}
+
+/* Ticket Layout */
+.ticket-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticket-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #111827;
+    text-decoration: none;
+}
+
+.ticket-title:hover {
+    color: #2563eb;
+}
+
+.ticket-meta {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.3rem;
+}
+
+/* Badges */
+.badge {
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-open {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-progress {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-closed {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-priority {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/* Filters */
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.filter-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Buttons */
+.btn-light {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.ticket-card {
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.ticket-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    border-color: #d1d5db;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.badge-abierto {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-progreso {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
+.badge-cerrado {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.page-header {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 25px;
+}
+
+.filter-form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 25px;
+}
+
+.filter-form select,
+.filter-form input {
+    background-color: #f9fafb;
+}
+
+.ticket-detail-card {
+    padding: 30px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    margin-bottom: 30px;
+}
+
+.form-card {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 35px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+
+.form-header {
+    margin-bottom: 25px;
+}
+
+.form-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.form-subtitle {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.ticket-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.ticket-form input,
+.ticket-form select,
+.ticket-form textarea {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.ticket-form input:focus,
+.ticket-form select:focus,
+.ticket-form textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.error-message {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #dc2626;
+}
+
+.help-text {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.form-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.delete-card {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 35px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    border: 1px solid #fee2e2;
+}
+
+.delete-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #b91c1c;
+}
+
+.delete-subtitle {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.delete-ticket-info {
+    margin: 25px 0;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    display: flex;
+    flex-direction: column;
+}
+
+.delete-label {
+    font-size: 13px;
+    color: #7f1d1d;
+    margin-bottom: 4px;
+}
+
+.delete-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #991b1b;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 12px;
+}

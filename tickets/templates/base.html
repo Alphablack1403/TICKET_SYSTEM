@@ -4,13 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Ticket System{% endblock %}</title>
+
+    <!-- Google Font profesional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <div class="container">
-        {% block content %}
-        {% endblock %}
-    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="logo">🎫 Ticket System</h1>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="app-main">
+        <div class="app-container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
 
     <script src="{% static 'js/main.js' %}"></script>
 </body>

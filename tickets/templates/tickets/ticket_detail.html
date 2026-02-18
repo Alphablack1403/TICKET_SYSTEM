@@ -1,75 +1,125 @@
-{% extends "base.html" %} {% block title %}Detalle Ticket{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% block title %}Detalle Ticket{% endblock %}
+{% block content %}
 
-<div class="ticket-detail-card">
-  <div class="ticket-detail-header">
-    <h2>{{ ticket.titulo }}</h2>
+<div class="container">
 
-    <div class="ticket-actions">
-      <a href="{% url 'ticket_update' ticket.pk %}" class="btn btn-secondary">
-        Editar
-      </a>
+  <!-- CARD PRINCIPAL -->
+  <div class="ticket-detail-card">
 
-      <a href="{% url 'ticket_delete' ticket.pk %}" class="btn btn-danger">
-        Eliminar
-      </a>
+    <div class="ticket-detail-header">
+      <div>
+        <h2>{{ ticket.titulo }}</h2>
+      </div>
 
-      <a href="{% url 'ticket_list' %}" class="btn btn-secondary"> Volver </a>
+      <div class="ticket-actions">
+        <a href="{% url 'ticket_update' ticket.pk %}" class="btn btn-secondary">
+          Editar
+        </a>
+
+        <a href="{% url 'ticket_delete' ticket.pk %}" class="btn btn-danger">
+          Eliminar
+        </a>
+
+        <a href="{% url 'ticket_list' %}" class="btn btn-secondary">
+          Volver
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="ticket-detail-meta">
-    {% if ticket.estado == "ABIERTO" %}
-    <span class="badge badge-abierto">Abierto</span>
-    {% elif ticket.estado == "EN_PROGRESO" %}
-    <span class="badge badge-progreso">En progreso</span>
-    {% else %}
-    <span class="badge badge-cerrado">Cerrado</span>
+    <!-- META -->
+    <div class="ticket-detail-meta">
+
+      {% if ticket.estado == "ABIERTO" %}
+        <span class="badge badge-abierto">Abierto</span>
+      {% elif ticket.estado == "EN_PROGRESO" %}
+        <span class="badge badge-progreso">En progreso</span>
+      {% else %}
+        <span class="badge badge-cerrado">Cerrado</span>
+      {% endif %}
+
+      <span class="priority">
+        Prioridad: <strong>{{ ticket.prioridad }}</strong>
+      </span>
+
+      <span>
+        <strong>Creado por:</strong> {{ ticket.usuario.username }}
+      </span>
+
+      <span>
+        <strong>Actualizado:</strong>
+        {{ ticket.updated_at|date:"d/m/Y H:i" }}
+      </span>
+
+    </div>
+
+    <!-- DESCRIPCIÓN -->
+    <div class="ticket-description">
+      <h4>Descripción</h4>
+      <p>{{ ticket.descripcion }}</p>
+    </div>
+
+    {% if ticket.estado == "CERRADO" %}
+      <div style="margin-top:20px;">
+        <form method="post"
+              action="{% url 'ticket_reopen' ticket.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">
+            Reabrir ticket
+          </button>
+        </form>
+      </div>
     {% endif %}
 
-    <span class="priority"> Prioridad: {{ ticket.prioridad }} </span>
-    <span><strong>Creado por:</strong> {{ ticket.usuario.username }}</span>
   </div>
 
-  <div class="ticket-description">{{ ticket.descripcion }}</div>
+  <!-- COMENTARIOS -->
+  <div class="card">
 
-  {% if ticket.estado == "CERRADO" %}
-  <form
-    method="post"
-    action="{% url 'ticket_reopen' ticket.pk %}"
-    class="reopen-form"
-  >
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Reabrir ticket</button>
-  </form>
-  {% endif %}
-</div>
+    <h3>Comentarios</h3>
 
-<hr />
+    <div class="comments-container">
 
-<h3>Comentarios</h3>
+      {% for comentario in comentarios %}
+        <div class="comment-card">
 
-<div class="comments-container">
-  {% for comentario in comentarios %}
-  <div class="comment-card">
-    <div class="comment-header">
-      <strong>{{ comentario.usuario.username }}</strong>
-      <span class="comment-date">{{ comentario.fecha_registro }}</span>
+          <div class="comment-header">
+            <strong>{{ comentario.usuario.username }}</strong>
+            <span class="comment-date">
+              {{ comentario.fecha_registro|date:"d/m/Y H:i" }}
+            </span>
+          </div>
+
+          <div class="comment-body">
+            {{ comentario.descripcion }}
+          </div>
+
+        </div>
+      {% empty %}
+        <p class="empty-message">
+          No hay comentarios aún.
+        </p>
+      {% endfor %}
+
     </div>
 
-    <div class="comment-body">{{ comentario.descripcion }}</div>
   </div>
-  {% empty %}
-  <p class="empty-message">No hay comentarios aún.</p>
-  {% endfor %}
+
+  <!-- FORMULARIO -->
+  <div class="card">
+
+    <h4>Agregar comentario</h4>
+
+    <form method="post" class="comment-form">
+      {% csrf_token %}
+      {{ form.descripcion }}
+      <button type="submit" class="btn btn-primary">
+        Enviar comentario
+      </button>
+    </form>
+
+  </div>
+
 </div>
-
-<hr />
-
-<h4>Agregar comentario</h4>
-
-<form method="post" class="comment-form">
-  {% csrf_token %} {{ form.descripcion }}
-  <button type="submit" class="btn btn-primary">Enviar comentario</button>
-</form>
 
 {% endblock %}

@@ -4,19 +4,37 @@
 {% block content %}
 
 <div class="container">
-    <h2>¿Seguro que deseas eliminar este ticket?</h2>
 
-    <div class="ticket-card">
-        <strong>{{ ticket.titulo }}</strong>
+  <div class="delete-card">
+
+    <div class="delete-header">
+      <h2>Confirmar eliminación</h2>
+      <p class="delete-subtitle">
+        Esta acción no se puede deshacer.
+      </p>
     </div>
 
-    <form method="post" class="filter-form">
-        {% csrf_token %}
-        <div class="filter-actions">
-            <button type="submit" class="btn btn-danger">Confirmar</button>
-            <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Cancelar</a>
-        </div>
+    <div class="delete-ticket-info">
+      <span class="delete-label">Ticket:</span>
+      <span class="delete-title">{{ ticket.titulo }}</span>
+    </div>
+
+    <form method="post" class="delete-form">
+      {% csrf_token %}
+
+      <div class="delete-actions">
+        <button type="submit" class="btn btn-danger">
+          Sí, eliminar ticket
+        </button>
+
+        <a href="{% url 'ticket_detail' ticket.pk %}" class="btn btn-secondary">
+          Cancelar
+        </a>
+      </div>
     </form>
+
+  </div>
+
 </div>
 
 {% endblock %}

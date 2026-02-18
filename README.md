@@ -1,63 +1,103 @@
-##Ticket System - Django
+# 🎫 Ticket System – Django
 
-    Mini sistema de gestión de tickets desarrollado en Django como prueba técnica. Permite crear, listar, actualizar estado y prioridad, así como gestionar comentarios asociados a cada ticket, persistiendo la información en base de datos SQL (SQLite).
+Sistema de gestión de tickets desarrollado en Django como prueba técnica.  
+Permite administrar incidencias mediante un flujo básico de creación, seguimiento y actualización, incluyendo gestión de comentarios asociados a cada ticket.
 
-##Tecnologías utilizadas
+La aplicación implementa autenticación, control de acceso y persistencia en base de datos relacional.
 
-    Python 3.10+
+---
 
-    Django
+## 🚀 Stack Tecnológico
 
-    SQLite
+- Python 3.12
+- Django 6.0.2
+- SQLite (entorno local)
+- Docker & Docker Compose
+- HTML5 / CSS3 / JS (Django Templates)
 
-    HTML / CSS (plantillas Django)
+---
 
-##Requisitos
+## 🏗 Arquitectura
 
-    Python 3.10 o superior
+El proyecto sigue el patrón MVT (Model–View–Template) de Django.
 
-    pip
+### Modelos principales
 
-    Git
+- **Ticket**
+  - Título
+  - Descripción
+  - Estado (TextChoices)
+  - Prioridad (TextChoices)
+  - Fecha de creación
+  - Usuario creador
 
-##Instalación y ejecución en local
-    1️⃣ Clonar el repositorio
-    git clone <URL_DEL_REPOSITORIO>
-    cd ticket_system
+- **Comentario**
+  - Relación ForeignKey con Ticket
+  - Autor
+  - Contenido
+  - Fecha de creación
 
-    2️⃣ Crear entorno virtual
-    python -m venv venv
+### Componentes técnicos implementados
 
-    3️⃣ Activar entorno virtual
+- ModelForms para validación
+- Autenticación integrada de Django
+- Protección CSRF
+- Decoradores `@login_required`
+- Separación de entorno mediante contenedores Docker
 
-    Windows:
+---
 
-    venv\Scripts\activate
+## ⚙️ Ejecución en entorno local (modo desarrollo)
 
+### 1️⃣ Clonar repositorio
 
-    Linux / Mac:
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd ticket_system
 
-    source venv/bin/activate
+### 2️⃣ Crear entorno virtual
 
-    4️⃣ Instalar dependencias
-    pip install -r requirements.txt
-
-    5️⃣ Aplicar migraciones
-    python manage.py migrate
-
-    6️⃣ Crear superusuario (opcional, recomendado)
-    python manage.py createsuperuser
-
-    7️⃣ Ejecutar el servidor
-    python manage.py runserver
+python -m venv venv
 
 
-    La aplicación estará disponible en:
-    http://127.0.0.1:8000/
+### 3️⃣ Activar entorno virtual
 
-##Funcionalidades implementadas (MVP)
+venv\Scripts\activate
+
+### 4️⃣ Instalar dependencias
+
+pip install -r requirements.txt
+
+### 5️⃣ Aplicar migraciones
+
+python manage.py migrate
+
+### 6️⃣ Crear superusuario (recomendado)
+
+python manage.py createsuperuser
+
+Aplicación disponible en: http://127.0.0.1:8000/
+
+## 
+🐳 Ejecución con Docker
+Requisitos
+
+    * Docker Desktop
+
+    * Docker Compose
+
+### 1️⃣ Levantar entorno
+
+docker compose up --build
+
+Aplicación disponible en: http://localhost:8000/
+
+
+### ✅ Funcionalidades Implementadas (MVP)
 
     Crear ticket
+
+    Eliminar ticket
 
     Listar tickets
 
@@ -69,20 +109,49 @@
 
     Agregar comentarios
 
-    Persistencia en base de datos SQLite
+    Autenticación de usuarios
 
-    Autenticación y control de acceso básico por rol
+    Control de acceso
 
-##Estructura básica
+    Persistencia en SQLite
 
-    Modelo Ticket con estados y prioridades definidos mediante TextChoices.
+### 🔐 Seguridad Implementada
 
-    Modelo Comentario relacionado mediante ForeignKey.
+    Protección CSRF
 
-    Uso de ModelForms.
+    Validación de formularios en backend
 
-    Control de acceso con @login_required.
+    Restricción de vistas mediante autenticación
 
-##Uso de IA
+    Manejo seguro de sesiones
 
-    Se utilizó asistencia de inteligencia artificial como apoyo para revisión de código y optimización de implementación, manteniendo validación manual y comprensión de cada componente desarrollado.
+
+### 📦 Estructura del Proyecto
+    ticket_system/
+    │
+    ├── config/            # Configuración principal Django
+    ├── tickets/           # Aplicación principal
+    ├── static/            # Archivos estáticos
+    ├── templates/         # Plantillas
+    ├── Dockerfile
+    ├── docker-compose.yml
+    └── requirements.txt
+
+### 📌 Posibles Mejoras Futuras
+
+    Separación de settings (dev/prod)
+
+    Uso de variables de entorno (.env)
+
+    Migración a PostgreSQL
+
+    Implementación de permisos por rol más granular
+
+    Exposición de API REST con Django REST Framework
+
+    Implementación de pruebas automatizadas
+
+
+### 🤖 Uso de Inteligencia Artificial
+
+    Se utilizó asistencia de IA como herramienta de apoyo para optimización de código, manteniendo validación manual, comprensión y control total sobre la arquitectura y decisiones técnicas adoptadas, la unica inteligencia artificial utilizada fue ChatGPT.

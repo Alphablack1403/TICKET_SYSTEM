@@ -1,103 +1,175 @@
 {% extends "base.html" %}
-{% block title %}Lista de Tickets{% endblock %}
-
 {% block content %}
 
-<h1>Gestión de Tickets</h1>
+<div class="container">
 
-<div class="header-bar">
-    <div>
-        <strong>Usuario:</strong> {{ request.user.username }}
-    </div>
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-secondary">Cerrar sesión</button>
-    </form>
-</div>
+    <!-- HEADER -->
+    <div class="page-header">
 
-<br>
+        <div class="page-header-left">
+            <h2>Gestión de Tickets</h2>
+            <div class="user-info">
+                Usuario activo: {{ request.user.username }}
+            </div>
+        </div>
 
-<a href="{% url 'ticket_create' %}" class="btn btn-primary">
-    + Crear Ticket
-</a>
+        <div class="page-header-right">
+            <a href="{% url 'ticket_create' %}" class="btn btn-primary">
+                + Nuevo Ticket
+            </a>
 
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
 
-<hr>
-
-<h3>Filtros</h3>
-
-<form method="get" class="filter-form">
-    
-    <div class="form-row">
-        <label>Estado</label>
-        <select name="estado">
-            <option value="">Todos</option>
-            {% for value, label in estados %}
-                <option value="{{ value }}"
-                    {% if estado_actual == value %}selected{% endif %}>
-                    {{ label }}
-                </option>
-            {% endfor %}
-        </select>
     </div>
 
-    <div class="form-row">
-        <label>Prioridad</label>
-        <select name="prioridad">
-            <option value="">Todas</option>
-            {% for value, label in prioridades %}
-                <option value="{{ value }}"
-                    {% if prioridad_actual == value %}selected{% endif %}>
-                    {{ label }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
+    <hr>
 
-    <div class="form-row">
-        <label>Categoría</label>
-        <input type="text" name="categoria" value="{{ categoria_actual|default:'' }}">
-    </div>
+    <!-- FILTROS -->
+    <form method="get" class="filter-form">
 
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-    <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Limpiar</a>
+        <div class="form-row">
+            <label>Estado</label>
+            <select name="estado">
+                <option value="">Todos</option>
+                {% for value, label in estados %}
+                    <option value="{{ value }}"
+                        {% if estado_actual == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-</form>
+        <div class="form-row">
+            <label>Prioridad</label>
+            <select name="prioridad">
+                <option value="">Todas</option>
+                {% for value, label in prioridades %}
+                    <option value="{{ value }}"
+                        {% if prioridad_actual == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-<hr>
+        <div class="form-row">
+            <label>Categoría</label>
+            <input type="text" name="categoria"
+                   value="{{ categoria_actual|default:'' }}">
+        </div>
 
-{% for ticket in tickets %}
-    <div class="ticket-card">
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">
+                Aplicar
+            </button>
 
-        <div class="ticket-title">
-            <a href="{% url 'ticket_detail' ticket.pk %}">
-                {{ ticket.titulo }}
+            <a href="{% url 'ticket_list' %}" class="btn btn-secondary">
+                Limpiar
             </a>
         </div>
 
-        <div class="ticket-meta">
-            Creado por: {{ ticket.usuario.username }} <br>
-            Última actualización: {{ ticket.updated_at }}
+    </form>
+
+    <hr>
+
+    <!-- LISTADO DE TICKETS -->
+
+    {% for ticket in tickets %}
+
+        <div class="ticket-card">
+
+            <div class="ticket-title">
+                <a href="{% url 'ticket_detail' ticket.pk %}">
+                    {{ ticket.titulo }}
+                </a>
+            </div>
+
+            <div class="ticket-meta">
+                Creado por {{ ticket.usuario.username }} |
+                Actualizado: {{ ticket.updated_at|date:"d/m/Y H:i" }}
+            </div>
+
+            <div class="ticket-status">
+
+                {% if ticket.estado == "ABIERTO" %}
+                    <span class="badge badge-abierto">Abierto</span>
+                {% elif ticket.estado == "EN_PROGRESO" %}
+                    <span class="badge badge-progreso">En progreso</span>
+                {% else %}
+                    <span class="badge badge-cerrado">Cerrado</span>
+                {% endif %}
+
+                <span class="priority">
+                    Prioridad: {{ ticket.prioridad }}
+                </span>
+
+            </div>
+
         </div>
 
-        <div class="ticket-status">
-            {% if ticket.estado == "ABIERTO" %}
-                <span class="badge badge-abierto">Abierto</span>
-            {% elif ticket.estado == "EN_PROGRESO" %}
-                <span class="badge badge-progreso">En progreso</span>
-            {% else %}
-                <span class="badge badge-cerrado">Cerrado</span>
+    {% empty %}
+
+        <div class="empty-message">
+            No hay tickets disponibles.
+        </div>
+
+    {% endfor %}
+
+    <!-- PAGINACIÓN -->
+
+    {% if tickets.has_other_pages %}
+        <div style="margin-top: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+
+            {% if tickets.has_previous %}
+                <a href="?page=1
+                    {% if estado_actual %}&estado={{ estado_actual }}{% endif %}
+                    {% if prioridad_actual %}&prioridad={{ prioridad_actual }}{% endif %}
+                    {% if categoria_actual %}&categoria={{ categoria_actual }}{% endif %}"
+                   class="btn btn-secondary">
+                    « Primera
+                </a>
+
+                <a href="?page={{ tickets.previous_page_number }}
+                    {% if estado_actual %}&estado={{ estado_actual }}{% endif %}
+                    {% if prioridad_actual %}&prioridad={{ prioridad_actual }}{% endif %}
+                    {% if categoria_actual %}&categoria={{ categoria_actual }}{% endif %}"
+                   class="btn btn-secondary">
+                    ‹ Anterior
+                </a>
             {% endif %}
 
-            <span class="priority">
-                Prioridad: {{ ticket.prioridad }}
+            <span>
+                Página {{ tickets.number }} de {{ tickets.paginator.num_pages }}
             </span>
+
+            {% if tickets.has_next %}
+                <a href="?page={{ tickets.next_page_number }}
+                    {% if estado_actual %}&estado={{ estado_actual }}{% endif %}
+                    {% if prioridad_actual %}&prioridad={{ prioridad_actual }}{% endif %}
+                    {% if categoria_actual %}&categoria={{ categoria_actual }}{% endif %}"
+                   class="btn btn-secondary">
+                    Siguiente ›
+                </a>
+
+                <a href="?page={{ tickets.paginator.num_pages }}
+                    {% if estado_actual %}&estado={{ estado_actual }}{% endif %}
+                    {% if prioridad_actual %}&prioridad={{ prioridad_actual }}{% endif %}
+                    {% if categoria_actual %}&categoria={{ categoria_actual }}{% endif %}"
+                   class="btn btn-secondary">
+                    Última »
+                </a>
+            {% endif %}
+
         </div>
+    {% endif %}
 
-    </div>
-
-{% empty %}
-    <p>No hay tickets disponibles.</p>
-{% endfor %}
+</div>
 
 {% endblock %}

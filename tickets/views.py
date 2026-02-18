@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from .forms import TicketUpdateFormUsuario, TicketUpdateFormAdmin
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 @login_required
 def ticket_list(request):
@@ -19,7 +20,7 @@ def ticket_list(request):
     prioridad = request.GET.get('prioridad')
     categoria = request.GET.get('categoria')
 
-    # Aplicar filtros si existen
+    # Aplicar filtros
     if estado:
         tickets = tickets.filter(estado=estado)
 
@@ -29,17 +30,24 @@ def ticket_list(request):
     if categoria:
         tickets = tickets.filter(categoria__icontains=categoria)
 
-    # Orden recomendado (mejora profesional)
+    # Orden recomendado
     tickets = tickets.order_by('-updated_at')
 
+    # 🔵 PAGINACIÓN
+    paginator = Paginator(tickets, 5)  # 5 tickets por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'tickets/ticket_list.html', {
-        'tickets': tickets,
+        'tickets': page_obj,  # IMPORTANTE
+        'page_obj': page_obj,
         'estado_actual': estado,
         'prioridad_actual': prioridad,
         'categoria_actual': categoria,
         'estados': Ticket.Estado.choices,
         'prioridades': Ticket.Prioridad.choices
     })
+
 
 @login_required
 def ticket_detail(request, pk):
